@@ -1,0 +1,77 @@
+class Board:
+    #Method that prints the board
+    def printBoard(self, board):
+        iX = 0
+        iY = 0
+        for x in range(len(board)):
+            for y in range(len(board[x])):
+                board[x][y].getImage(iX,iY)
+                iX += 50
+            iY += 50
+            iX = 0
+
+    #Method to randomly place mines and set content
+    def createBoard(self, board, numMines):
+        count = 0
+        while count < numMines:
+            iX = int(random(len(board)))
+            iY = int(random(len(board)))
+            #Make the index a mine if it is not one and change spots around it accordingly
+            if not board[iX][iY].isMine:
+                board[iX][iY].isMine = True
+                count += 1
+                if iX > 0:   
+                    board[iX-1][iY].numAround += 1        #Check left
+                    if iY > 0:                
+                        board[iX-1][iY-1].numAround += 1  #Check top left
+                    if iY < len(board)-1:
+                        board[iX-1][iY+1].numAround += 1  #Check bottom left
+                if iX < len(board)-1:
+                    board[iX+1][iY].numAround += 1        #Check right
+                    if iY > 0:
+                        board[iX+1][iY-1].numAround += 1  #Check top right
+                    if iY < len(board)-1:                
+                        board[iX+1][iY+1].numAround += 1  #Check bottom right
+                if iY > 0:
+                    board[iX][iY-1].numAround += 1        #Check top
+                if iY < len(board)-1:
+                    board[iX][iY+1].numAround += 1        #Check bottom
+
+    #Recursively show empty spots
+    def show(self, board, iX, iY):
+        if board[iY][iX].seen == True:
+            return
+        board[iY][iX].seen = True
+        if board[iY][iX].numAround == 0 and not board[iY][iX].isMine:
+            if iY > 0:
+                if board[iY-1][iX].isMine == False and board[iY-1][iX].numAround == 0:        #Check top
+                    self.show(board, iX, iY-1)
+                board[iY-1][iX].seen = True
+                if iX > 0:                
+                    if board[iY-1][iX-1].isMine == False and board[iY-1][iX-1].numAround == 0:        #Check top left
+                        self.show(board, iX-1, iY-1)
+                    board[iY-1][iX-1].seen = True
+                if iX < len(board)-1:
+                    if board[iY-1][iX+1].isMine == False and board[iY-1][iX+1].numAround == 0:        #Check top right
+                        self.show(board, iX+1, iY-1)
+                    board[iY-1][iX+1].seen = True
+            if iY < len(board)-1:
+                if board[iY+1][iX].isMine == False and board[iY+1][iX].numAround == 0:        #Check bottom
+                    self.show(board, iX, iY+1)
+                board[iY+1][iX].seen = True
+                if iX > 0:
+                    if board[iY+1][iX-1].isMine == False and board[iY+1][iX-1].numAround == 0:        #Check bottom left
+                        self.show(board, iX-1, iY+1)
+                    board[iY+1][iX-1].seen = True
+                if iX < len(board)-1:                
+                    if board[iY+1][iX+1].isMine == False and board[iY+1][iX+1].numAround == 0:        #Check bottom right
+                        self.show(board, iX+1, iY+1)
+                    board[iY+1][iX+1].seen = True
+            if iX > 0:
+                if board[iY][iX-1].isMine == False and board[iY][iX-1].numAround == 0:        #Check left
+                    self.show(board, iX-1, iY)
+                board[iY][iX-1].seen = True
+            if iX < len(board)-1:
+                if board[iY][iX+1].isMine == False and board[iY][iX+1].numAround == 0:        #Check right
+                    self.show(board, iX+1, iY)
+                board[iY][iX+1].seen = True
