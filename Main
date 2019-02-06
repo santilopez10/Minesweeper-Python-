@@ -1,0 +1,28 @@
+#Import the Cell class from the Cell file
+from Cell import Cell 
+from Board import Board 
+
+def setup():
+    size(500,500)
+    frameRate(40)
+    #load the images
+    photo = loadImage("square.png")
+    one = loadImage("1.png")
+    two = loadImage("2.png")
+    three = loadImage("3.png")
+    four = loadImage("4.png")
+    blank = loadImage("blank.png")
+    mine = loadImage("mine.png")
+    #initialize the board
+    global boardMethods 
+    boardMethods = Board()
+    global board 
+    board = [[Cell(False,False,photo,blank,mine,one,two,three,four) for x in range(10)] for y in range(10)]
+    boardMethods.createBoard(board, 10)
+
+def draw():
+    background(500)
+    boardMethods.printBoard(board)
+    
+def mouseClicked():
+    boardMethods.show(board, mouseX / 50, mouseY / 50)
