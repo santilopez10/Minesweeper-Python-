@@ -1,0 +1,52 @@
+class Cell:
+    #member variables
+    seen = False
+    isMine = False
+    numAround = 0
+    unclicked = loadImage("square.png")
+    blank = loadImage("blank.png")
+    mine = loadImage("mine.png")
+    one = loadImage("one.png")   
+    two = loadImage("one.png")  
+    three = loadImage("one.png")
+    four = loadImage("3.png") 
+    
+    def __init__(self,isM=False,s=False,photo=0,blank=0,mine=0,one=0,two=0,three=0,four=0):
+        self.isMine = isM
+        self.seen = s
+        self.numAround = 0
+        self.unclicked = photo
+        self.blank = blank
+        self.mine = mine
+        self.one = one
+        self.two = two
+        self.three = three
+        self.four = four
+
+    #Method for printing board
+    def getContent(self):
+        if self.seen and self.isMine:
+            return "*"
+        elif self.seen and not self.isMine:
+            if self.numAround > 0:
+                return str(self.numAround)
+            return "_"
+        else:
+            return "#"
+    
+    #Method for drawing board
+    def getImage(self, iX, iY):
+        if not self.seen:
+            image(self.unclicked, iX, iY)
+        elif self.isMine:
+            image(self.mine, iX, iY)
+        elif self.numAround == 1:
+            image(self.one, iX, iY)
+        elif self.numAround == 2:
+            image(self.two, iX, iY)
+        elif self.numAround == 3:
+            image(self.three, iX, iY)
+        elif self.numAround >= 4:
+            image(self.four, iX, iY)
+        elif self.numAround == 0:
+            image(self.blank, iX, iY)
